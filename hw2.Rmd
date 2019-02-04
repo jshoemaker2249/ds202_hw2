@@ -46,7 +46,7 @@ library(ggplot2)
 1. What are the 3 most fuel-efficient models in terms of highway mileage? Storage the data frame (with 3 rows) containing all information of these three cars in a variable named `top3` and print.
 
 ```{r}
-top3 <- head(mpg,3)
+top3 <- head(mpg[order(-mpg$hwy),],3)
 top3
 ```
 
@@ -57,11 +57,11 @@ numCompact
 ```
 3. Create a scatterplot of `hwy` and `cty` and describe the relationship. Why are there so few points visible?
 ```{r}
-qplot(hwy,cty,data=mpg)
+ggplot(mpg, aes(x=hwy, y=cty)) + geom_point()
 ```
 
-###Why are there so few points visible?
-Not all of the points are visible because there are some duplicate rows in which there are the same fuel efficiency stats.
+**Why are there so few points visible?**  
+Not all of the points are visible because there are some duplicate rows in which there are the same fuel efficiency stats.  
 
 4. Are cars in 2008 more fuel efficient than cars in 1999? Use graphs *and* summary statistics to answer this question. 
 
@@ -69,9 +69,24 @@ Not all of the points are visible because there are some duplicate rows in which
 #Breaking up the dataframe in two based on year
 dat1999 <- mpg[mpg$year == '1999', ]
 dat2008 <- mpg[mpg$year == '2008', ]
-qplot(hwy,cty, data= dat1999)
-qplot(hwy,cty, data= dat2008)
+
+#Summary Statistics of both years, city
+summary(dat1999$cty)
+summary(dat2008$cty)
+
+#Summary Statistics of both years, highway
+summary(dat1999$hwy)
+summary(dat2008$hwy)
+
+#Graph the fuel efficiency of 1999
+ggplot(dat1999, aes(x=hwy, y=cty)) + geom_point(colour="red") + ggtitle("Fuel Efficiency in 1999")
+
+#Graph from 2008
+ggplot(dat2008, aes(x=hwy, y=cty)) + geom_point(colour = "blue") + ggtitle("Fuel Efficiency in 2008")
 ```
+
+**Are cars more fuel efficient after 9 years?**  
+While the summary statistics do not necessarily suggest that there was a tangible improvement to fuel efficiency, however the graphs that compare 1999 to 2008 do show an upward and rightward shift. Therefore, I conclude that cars did become more fuel efficient over this period of time. 
 
 
 Note: your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission. Make sure that you don't use any file structure that depends on your computing environment.
